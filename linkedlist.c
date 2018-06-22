@@ -15,7 +15,6 @@ void delend(node **);
 void delbeg(node **);
 void delnth(node **,int);
 void print(node**);
-int reverset(node*,int);
 void revers(node **);
 int main()
 {
