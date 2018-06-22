@@ -15,13 +15,15 @@ void delend(node **);
 void delbeg(node **);
 void delnth(node **,int);
 void print(node**);
+int reverset(node*,int);
+void revers(node **);
 int main()
 {
    node *head=(node *)0x1;
    int ch,x,i,pos;
    while(1)
    {
-       printf("\n1.create\n 2.create list\n 3.insert at beginning\n 4.insert at Nth position\n 5.insert at end\n 6.delete at beginning\n 7.delete at Nth position\n 8.delete at ending\n 9.print\n 10.delete\n 11.exit\n enter your choice: ");
+       printf("\n1.create\n 2.create list\n 3.insert at beginning\n 4.insert at Nth position\n 5.insert at end\n 6.delete at beginning\n 7.delete at Nth position\n 8.delete at ending\n 9.reverse\n 10.print\n 11.delete\n 12.exit\n enter your choice: ");
        scanf("%d",&ch);
        switch(ch)
        {
@@ -104,9 +106,18 @@ int main()
                             printf("linklist not created");
                             continue;
                         }
+                        revers(&head);
+                        break;
+
+                case 10:
+                            if(head==(node *)0x1)
+                        {
+                            printf("linklist not created");
+                            continue;
+                        }
                         print(&head);
                         break;
-                case 10:
+                case 11:
                             if(head==(node *)0x1)
                         {
                             printf("linklist not created");
@@ -114,7 +125,7 @@ int main()
                         }
                         delete(&head);
                         break;
-                case 11:
+                case 12:
                         exit(1);
                         break;
                 default:
@@ -125,20 +136,49 @@ int main()
    }
     return 0;
 }
+
+
+
+
+
+
+
+
 void create(node**head)
 {
 	*head=NULL;
 }
+
+
+
+
+
+
+
+
 void print(node **head)
 {
     node *q= *head;
-	printf("list is:");
-	while(q!=NULL)
-	{
+	if(q==NULL)
+        printf("nothing to show");
+	else
+    {
+         printf("list is:");
+        while(q!=NULL)
+        {
 		printf("\n%d",q->data);
 		q=q->next;
-	}
+        }
+    }
 }
+
+
+
+
+
+
+
+
 void delete(node **head)
 {
 	node *q;
@@ -150,6 +190,13 @@ void delete(node **head)
 	}
 	*head=(node *)0x1;
 }
+
+
+
+
+
+
+
 void insbeg(node **head,int x)
 {
 	node *a;
@@ -158,61 +205,134 @@ void insbeg(node **head,int x)
 	(a->next)=*head;
 	*head=a;
 }
+
+
+
+
+
+
+
 void insnth(node **head,int pos,int x)
 {
-	node *z;
+	node *z,*e=*head;
 	int i;
 	z=(node *)malloc(sizeof(node));
 	z->data=x;
 	z->next=NULL;
-	if(pos==1)
+	 int c=0;
+    while(e!=NULL)
+    {
+        e=e->next;
+        c++;
+    }
+    if(pos>c)
+        printf("wrong input.... give new input....\nyour max input is=%d",c);
+    else
+    {
+
+	if(pos==0)
 	{
 		z->next=*head;
 		*head=z;
 		return;
 	}
-	node *w=*head;
-	for( i=0;i<pos-2;i++)
-	{
-		w=w->next;
+	    node *w=*head;
+        for( i=0;i<pos-2;i++)
+        {
+            w=w->next;
+        }
+        z->next=w->next;
+        w->next=z;
 	}
-	z->next=w->next;
-	w->next=z;
 }
+
+
+
+
+
+
+
+
 void delbeg(node **head)
 {
     node *h=*head;
-    *head=h->next;
-    free(h);
+
+    if(h==NULL)
+        printf("no number to delete....");
+    else
+    {
+       *head=h->next;
+        free(h);
+    }
 }
+
+
+
+
+
+
+
 void delend(node **head)
 {
-    node *u=*head,*p;
-    while(u->next->next!=NULL)
+    node *u=*head,*p=u->next;
+    if(u==NULL)
+        printf("no number left to delete.....");
+    else if(p==NULL)
     {
-        u=u->next;
+        free(u);
+        *head=NULL;
+
     }
-    p=u->next;
-    u->next=NULL;
+
+    else
+    {
+    while(p->next!=NULL)
+    {
+        u=p;
+        p=p->next;
+    }
+    u->next=p->next;
+    p->next=NULL;
     free(p);
+
+    }
 }
+
+
+
+
+
+
+
 void delnth(node **head,int pos)
 {
     node *k=*head;
-    if(pos==1)
+    if(k==NULL)
+        printf("no number to delete.....!!!");
+    else
     {
-        *head=(k->next);
+        if(pos==1)
+        {
+        *head=k->next;
         free(k);
-    }
-    int i;
-    for(i=0;i<pos-2;i++)
-    {
+        }
+        int i;
+        for(i=0;i<pos-2;i++)
+        {
         k=k->next;
+        }
+        node *o=k->next;
+        k->next=o->next;
+        free(o);
     }
-    node *o=k->next;
-    k->next=o->next;
-    free(o);
 }
+
+
+
+
+
+
+
 void insend(node** head,int x)
 {
     node*t;
@@ -234,6 +354,12 @@ t->next=NULL;
 e->next=t;
 }
 }
+
+
+
+
+
+
 void createlist(node** head,int x)
 {
     node *i;
@@ -255,3 +381,24 @@ i->next=NULL;
 e->next=i;
 }
 }
+
+
+
+
+
+
+void revers(node **head)
+{
+    node *t=*head;
+    node *prev=NULL;
+    node *next=NULL;
+    while(t!=NULL)
+    {
+        next=t->next;
+        t->next=prev;
+        prev=t;
+        t=next;
+    }
+    *head=prev;
+}
+
